@@ -125,6 +125,28 @@ Für den Standardfall liegt zusätzlich ein Starter-Script im gleichen Ordner:
 software/rew_turntable/run_0_90_15_manual.sh
 ```
 
+Für den normalen Werkstattbetrieb gibt es außerdem ein kleines Desktop-Fenster:
+
+```bash
+python software/rew_turntable/rew_turntable_gui.py
+```
+
+Dort können Startwinkel, Endwinkel und Schrittweite frei eingegeben werden, z. B.:
+
+```text
+Start: 0°
+Ende:  135°
+Schritt: 10°
+```
+
+Das erzeugt die Reihe:
+
+```text
+0°, 10°, 20°, 30°, 40°, 50°, 60°, 70°, 80°, 90°, 100°, 110°, 120°, 130°, 135°
+```
+
+Wenn der Endwinkel nicht genau auf dem Raster liegt, wird er als letzter Winkel zusätzlich angefahren. So funktioniert `0°` bis `135°` mit `10°` Schritten wie erwartet.
+
 Für den Bediener ist das die REW-Entsprechung zu ARTA `Start` in der Gruppenmessung.
 
 ## Script verwenden

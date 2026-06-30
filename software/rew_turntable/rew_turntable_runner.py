@@ -164,10 +164,14 @@ def parse_angles(spec: str) -> list[float]:
             while x <= stop + 1e-9:
                 vals.append(round(x, 6))
                 x += step
+            if vals and abs(vals[-1] - stop) > 1e-9:
+                vals.append(round(stop, 6))
         else:
             while x >= stop - 1e-9:
                 vals.append(round(x, 6))
                 x += step
+            if vals and abs(vals[-1] - stop) > 1e-9:
+                vals.append(round(stop, 6))
         return vals
     return [float(p.strip()) for p in spec.split(",") if p.strip()]
 
