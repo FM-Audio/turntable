@@ -6,14 +6,22 @@ Der bestehende Drehteller wurde ursprünglich für ARTA gebaut. REW 5.40+ besitz
 
 Ja, die Anbindung ist möglich.
 
-Es gibt zwei sinnvolle Betriebsarten:
+Für den vollautomatischen Betrieb muss in REW eine **Pro-Upgrade-Lizenz** hinterlegt sein. Das ist wichtig für Benutzer des GitHub-Repos:
+
+- automatische Sweeps per API: `POST /measure/command {"command": "SPL"}`
+- Sweep-Frequenzbereich per API setzen: `PUT /measure/sweep/configuration`
+
+Ohne Pro bleibt der manuelle Modus nutzbar: Das Programm dreht den Teller und wartet, bis der Benutzer in REW eine Messung gestartet/gespeichert hat.
+
+Es gibt drei Betriebsarten:
 
 | Modus | Voraussetzung | Ablauf |
 |---|---|---|
-| `manual` | REW 5.40+ API, keine Pro-Lizenz nötig | Script dreht den Teller, Bediener startet Messung in REW, Script erkennt neue Messung |
-| `auto` | REW 5.40+ API + REW Pro Upgrade | Script dreht den Teller und startet die Messung per API automatisch |
+| `auto` | REW 5.40+ API + REW Pro Upgrade | Programm dreht den Teller, startet den REW-Sweep per API, wartet bis die Messung fertig in REW erscheint, dreht weiter |
+| `manual` | REW 5.40+ API, keine Pro-Lizenz nötig | Programm dreht den Teller, Bediener startet Messung in REW, Programm erkennt neue Messung |
+| `turntable-only` | nur Netzwerk zum Arduino | Programm dreht nur den Teller |
 
-Wichtig: Laut REW-Dokumentation sind GET-Zugriffe frei nutzbar. Automatisierte Sweep-Messungen per API benötigen eine REW-Pro-Upgrade-Lizenz.
+Wichtig: Laut REW-Dokumentation sind GET-Zugriffe frei nutzbar. Schreibende API-Aktionen wie Sweep-Konfiguration und automatisierte Sweep-Messungen benötigen das REW-Pro-Upgrade.
 
 ## Architektur
 

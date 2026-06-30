@@ -49,7 +49,7 @@ class RewTurntableGui(tk.Tk):
         self.start_frequency = tk.IntVar(value=150)
         self.end_frequency = tk.IntVar(value=20000)
         self.sweep_length = tk.StringVar(value="512k")
-        self.mode = tk.StringVar(value="manual")
+        self.mode = tk.StringVar(value="auto")
         self.name_template = tk.StringVar(value="Angle {angle} deg")
 
         self._build_ui()
@@ -101,8 +101,8 @@ class RewTurntableGui(tk.Tk):
         mode_box = ttk.Frame(seq)
         mode_box.grid(row=1, column=0, columnspan=6, sticky="w", padx=6, pady=6)
         ttk.Label(mode_box, text="Modus:").pack(side=tk.LEFT, padx=(0, 8))
+        ttk.Radiobutton(mode_box, text="Auto: REW Sweep automatisch starten (Pro)", value="auto", variable=self.mode).pack(side=tk.LEFT, padx=4)
         ttk.Radiobutton(mode_box, text="Manuell: ich starte jede REW-Messung", value="manual", variable=self.mode).pack(side=tk.LEFT, padx=4)
-        ttk.Radiobutton(mode_box, text="Auto: REW per API starten", value="auto", variable=self.mode).pack(side=tk.LEFT, padx=4)
         ttk.Radiobutton(mode_box, text="Nur drehen", value="turntable-only", variable=self.mode).pack(side=tk.LEFT, padx=4)
 
         ttk.Label(seq, text="Name").grid(row=1, column=6, padx=6, pady=6, sticky="w")
