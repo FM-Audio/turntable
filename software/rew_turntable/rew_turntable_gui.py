@@ -13,6 +13,7 @@ import re
 import threading
 import time
 import tkinter as tk
+from pathlib import Path
 from tkinter import messagebox, ttk
 from typing import Any
 
@@ -25,6 +26,8 @@ from rew_turntable_runner import (
 )
 
 DEFAULT_TURNTABLE_IP = "192.168.178.191"
+ASSET_DIR = Path(__file__).resolve().parent / "assets"
+FM_AUDIO_LOGO = ASSET_DIR / "fm_audio_logo.png"
 
 
 class RewTurntableGui(tk.Tk):
@@ -71,13 +74,8 @@ class RewTurntableGui(tk.Tk):
             font=("TkDefaultFont", 15, "bold"),
         )
         title.grid(row=0, column=0, sticky="w")
-        logo = tk.Canvas(header, width=170, height=46, highlightthickness=0, bg=self.cget("bg"))
-        logo.grid(row=0, column=1, sticky="e")
-        logo.create_oval(4, 4, 42, 42, fill="#101820", outline="#00A3E0", width=2)
-        logo.create_text(23, 18, text="FM", fill="white", font=("TkDefaultFont", 11, "bold"))
-        logo.create_text(23, 31, text="audio", fill="#00A3E0", font=("TkDefaultFont", 7, "bold"))
-        logo.create_text(54, 15, text="FM-Audio", anchor="w", fill="#101820", font=("TkDefaultFont", 13, "bold"))
-        logo.create_text(54, 31, text="Turntable + REW", anchor="w", fill="#555555", font=("TkDefaultFont", 8))
+        self.logo_image = tk.PhotoImage(file=str(FM_AUDIO_LOGO))
+        ttk.Label(header, image=self.logo_image).grid(row=0, column=1, sticky="e")
 
         conn = ttk.LabelFrame(root, text="Verbindung")
         conn.grid(row=1, column=0, sticky="ew", pady=(0, 10))
