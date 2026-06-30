@@ -139,6 +139,27 @@ Mehr Details: [`docs/arta-setup.md`](docs/arta-setup.md)
 
 ![ARTA Gruppenmessung](Bilder/Gruppenmessung.png)
 
+## REW-Integration
+
+REW 5.40+ besitzt eine HTTP-API. Dadurch kann der vorhandene Arduino-Drehteller auch mit Room EQ Wizard genutzt werden.
+
+Das Python-Script liegt hier:
+
+```text
+software/rew_turntable/rew_turntable_runner.py
+```
+
+Dokumentation: [`docs/rew-integration.md`](docs/rew-integration.md)
+
+Kurzbeispiel für den aktuell geprüften Turntable:
+
+```bash
+python software/rew_turntable/rew_turntable_runner.py \
+  --turntable-ip 192.168.178.191 \
+  --mode manual \
+  --angles 0:180:15
+```
+
 ## Dokumentation
 
 | Dokument | Zweck |
@@ -146,6 +167,7 @@ Mehr Details: [`docs/arta-setup.md`](docs/arta-setup.md)
 | [`docs/build-guide.md`](docs/build-guide.md) | Aufbau und Projektüberblick |
 | [`docs/wiring.md`](docs/wiring.md) | Anschluss, Pins und Verdrahtung |
 | [`docs/arta-setup.md`](docs/arta-setup.md) | Einrichtung in ARTA |
+| [`docs/rew-integration.md`](docs/rew-integration.md) | REW-API-Anbindung und Python-Script |
 | [`docs/calibration.md`](docs/calibration.md) | Kalibrierung von `Stepsprograd` |
 | [`docs/troubleshooting.md`](docs/troubleshooting.md) | Fehlersuche |
 
