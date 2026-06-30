@@ -210,7 +210,18 @@ Vor dem Einschalten prüfen:
 
 ## Lizenz
 
-Siehe [`LICENSE`](LICENSE).
+Dieses Projekt steht unter der [`FM-Audio Non-Commercial Source License 1.0`](LICENSE).
+
+Kurzfassung:
+
+| Erlaubt | Nicht erlaubt |
+|---|---|
+| private Nutzung | kommerzielle Nutzung |
+| Lernen / Evaluieren / Hobby | Verkauf von Produkten, Kits, CAD-Dateien oder Software |
+| nicht-kommerzielle Änderungen | bezahlte Fertigung, Messung, Kalibrierung, Support oder Beratung |
+| nicht-kommerzielle Weitergabe unter gleicher Lizenz | Nutzung in kommerziellen Kunden-/Firmenprojekten |
+
+Es wird **keine Patentlizenz** gewährt. Für kommerzielle Nutzung, Patentrechte oder Sonderfreigaben bitte schriftlich anfragen: `turntable@fm-audio.eu`.
 
 ## Credits
 
