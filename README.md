@@ -166,11 +166,14 @@ Für die Werkstattbedienung mit frei einstellbarem Start-/Endwinkel, Schrittweit
 python software/rew_turntable/rew_turntable_gui.py
 ```
 
-Unter Windows kann das gleiche Fenster per Doppelklick gestartet werden:
+Unter Windows gibt es zwei Varianten:
 
-```text
-software\rew_turntable\run_gui_windows.bat
-```
+| Variante | Download/Start |
+|---|---|
+| Fertige Windows-EXE | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Windows.zip` herunterladen und `FM-Audio-REW-Turntable.exe` starten |
+| Python-Version | `software\rew_turntable\run_gui_windows.bat` doppelklicken |
+
+Die Windows-EXE wird automatisch über `.github/workflows/build-windows.yml` gebaut.
 
 ## Dokumentation
 

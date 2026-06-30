@@ -2,7 +2,31 @@
 
 Die GUI ist mit Python/Tkinter gebaut und läuft unter Windows, Linux und macOS.
 
-## Voraussetzungen
+## Fertige Windows-EXE
+
+Im GitHub-Repository wird automatisch ein Windows-Paket gebaut:
+
+```text
+FM-Audio-REW-Turntable-Windows.zip
+```
+
+Darin liegt:
+
+```text
+FM-Audio-REW-Turntable.exe
+```
+
+Download über GitHub:
+
+1. Repository öffnen.
+2. Reiter `Actions` öffnen.
+3. Workflow `Build Windows GUI` auswählen.
+4. Den neuesten erfolgreichen Lauf öffnen.
+5. Unter `Artifacts` das Paket `FM-Audio-REW-Turntable-Windows` herunterladen.
+
+Alternativ kann man weiterhin die Python-Version direkt starten.
+
+## Voraussetzungen für die Python-Version
 
 1. REW 5.40 oder neuer starten.
 2. In REW den API-Server aktivieren:
@@ -10,7 +34,7 @@ Die GUI ist mit Python/Tkinter gebaut und läuft unter Windows, Linux und macOS.
 3. Python 3 von <https://www.python.org/downloads/windows/> installieren.
    Wichtig: Tkinter ist beim offiziellen Python-Installer normalerweise enthalten.
 
-## Start
+## Start der Python-Version
 
 Im Ordner `software\rew_turntable` doppelklicken:
 

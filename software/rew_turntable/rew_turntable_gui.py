@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import queue
 import re
+import sys
 import threading
 import time
 import tkinter as tk
@@ -26,7 +27,8 @@ from rew_turntable_runner import (
 )
 
 DEFAULT_TURNTABLE_IP = "192.168.178.191"
-ASSET_DIR = Path(__file__).resolve().parent / "assets"
+BASE_DIR = Path(getattr(sys, "_MEIPASS", Path(__file__).resolve().parent))
+ASSET_DIR = BASE_DIR / "assets"
 FM_AUDIO_LOGO = ASSET_DIR / "fm_audio_logo.png"
 
 
