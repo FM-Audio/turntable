@@ -83,10 +83,53 @@ curl http://127.0.0.1:4735/application/commands
 
 Wenn JSON zurückkommt, läuft die API.
 
+## REW wie ARTA nutzen
+
+ARTA hat eine eingebaute Gruppenmessung:
+
+```text
+Record -> Spatial impulse response group record
+```
+
+Dort stellt man z. B. `0°` bis `90°` in `15°`-Schritten ein. ARTA ruft dann für jeden Winkel `turntable.exe` auf.
+
+REW hat aktuell keine identische eingebaute Turntable-Dialogbox. Die entsprechende Lösung ist daher ein **kleiner externer Ablaufstarter**:
+
+```text
+rew_turntable_runner.py
+```
+
+Der Ablaufstarter übernimmt das, was bei ARTA die Gruppenmessung macht:
+
+1. Winkelreihe erzeugen, z. B. `0, 15, 30, 45, 60, 75, 90`.
+2. Drehteller per UDP auf den Zielwinkel fahren.
+3. Einschwingzeit abwarten.
+4. REW-Messung starten oder auf manuell gestartete REW-Messung warten.
+5. Messung mit Winkelname/Notiz versehen.
+6. Zum nächsten Winkel gehen.
+
+Damit sieht der REW-Ablauf praktisch so aus:
+
+```bash
+python software/rew_turntable/rew_turntable_runner.py \
+  --turntable-ip 192.168.178.191 \
+  --mode manual \
+  --angles 0:90:15 \
+  --settle-s 3 \
+  --name-template "Angle {angle} deg"
+```
+
+Für den Standardfall liegt zusätzlich ein Starter-Script im gleichen Ordner:
+
+```bash
+software/rew_turntable/run_0_90_15_manual.sh
+```
+
+Für den Bediener ist das die REW-Entsprechung zu ARTA `Start` in der Gruppenmessung.
+
 ## Script verwenden
 
 Das Script liegt hier:
-
 ```text
 software/rew_turntable/rew_turntable_runner.py
 ```

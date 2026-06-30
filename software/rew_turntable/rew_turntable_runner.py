@@ -110,15 +110,26 @@ class RewClient:
             raise RuntimeError(f"REW /measurements failed: {res.error}")
         if isinstance(res.data, list):
             return res.data
+        if isinstance(res.data, dict):
+            # REW V5.40 Beta 124 returns an object keyed by measurement UUID.
+            # Preserve API order when possible and copy the key into the summary
+            # so the CLI can print a useful handle for the new measurement.
+            measurements: list[dict[str, Any]] = []
+            for uuid, summary in res.data.items():
+                if isinstance(summary, dict):
+                    item = dict(summary)
+                    item.setdefault("uuid", uuid)
+                    measurements.append(item)
+            return measurements
         return []
 
     def measurement_count(self) -> int:
         return len(self.measurements())
 
     def set_next_name(self, name: str) -> None:
-        # REW accepts partial data models for PUT/POST. If this fails we keep going;
-        # naming can also be handled after the measurement.
-        self.put("/measure/naming", {"name": name})
+        # REW's MeasurementNaming model uses "title" for the next measurement name.
+        # The PUT endpoint accepts partial models in REW 5.40 Beta 124.
+        self.put("/measure/naming", {"title": name})
 
     def set_notes(self, notes: str) -> None:
         self.post("/measure/notes", notes)
