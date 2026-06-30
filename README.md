@@ -160,10 +160,16 @@ python software/rew_turntable/rew_turntable_runner.py \
   --angles 0:180:15
 ```
 
-Für die Werkstattbedienung mit frei einstellbarem Start-/Endwinkel und Schrittweite gibt es zusätzlich:
+Für die Werkstattbedienung mit frei einstellbarem Start-/Endwinkel, Schrittweite und REW-Frequenzbereich gibt es zusätzlich:
 
 ```bash
 python software/rew_turntable/rew_turntable_gui.py
+```
+
+Unter Windows kann das gleiche Fenster per Doppelklick gestartet werden:
+
+```text
+software\rew_turntable\run_gui_windows.bat
 ```
 
 ## Dokumentation

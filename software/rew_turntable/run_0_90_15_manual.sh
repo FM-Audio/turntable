@@ -14,4 +14,7 @@ exec python3 "$SCRIPT_DIR/rew_turntable_runner.py" \
   --angles "${REW_TURNTABLE_ANGLES:-0:90:15}" \
   --settle-s "${REW_TURNTABLE_SETTLE_S:-3}" \
   --measure-timeout "${REW_TURNTABLE_MEASURE_TIMEOUT:-180}" \
+  --start-frequency "${REW_TURNTABLE_START_FREQ:-150}" \
+  --end-frequency "${REW_TURNTABLE_END_FREQ:-20000}" \
+  --sweep-length "${REW_TURNTABLE_SWEEP_LENGTH:-512k}" \
   --name-template "${REW_TURNTABLE_NAME_TEMPLATE:-Angle {angle} deg}"

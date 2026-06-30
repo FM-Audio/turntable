@@ -30,8 +30,8 @@ class RewTurntableGui(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("REW Turntable Controller")
-        self.geometry("920x700")
-        self.minsize(820, 620)
+        self.geometry("1050x760")
+        self.minsize(980, 700)
 
         self.log_queue: queue.Queue[str] = queue.Queue()
         self.worker: threading.Thread | None = None
@@ -46,6 +46,9 @@ class RewTurntableGui(tk.Tk):
         self.single_angle = tk.DoubleVar(value=0.0)
         self.settle_s = tk.DoubleVar(value=3.0)
         self.measure_timeout = tk.DoubleVar(value=180.0)
+        self.start_frequency = tk.IntVar(value=150)
+        self.end_frequency = tk.IntVar(value=20000)
+        self.sweep_length = tk.StringVar(value="512k")
         self.mode = tk.StringVar(value="manual")
         self.name_template = tk.StringVar(value="Angle {angle} deg")
 
@@ -56,11 +59,11 @@ class RewTurntableGui(tk.Tk):
         root = ttk.Frame(self, padding=12)
         root.pack(fill=tk.BOTH, expand=True)
         root.columnconfigure(0, weight=1)
-        root.rowconfigure(3, weight=1)
+        root.rowconfigure(4, weight=1)
 
         title = ttk.Label(
             root,
-            text="REW-Drehteller: Messreihe starten wie in ARTA",
+            text="REW-Drehteller Messreihe",
             font=("TkDefaultFont", 15, "bold"),
         )
         title.grid(row=0, column=0, sticky="w", pady=(0, 10))
@@ -114,8 +117,20 @@ class RewTurntableGui(tk.Tk):
         ttk.Entry(buttons, textvariable=self.single_angle, width=8).pack(side=tk.LEFT, padx=6)
         ttk.Button(buttons, text="Einzelwinkel fahren", command=lambda: self.move_single()).pack(side=tk.LEFT)
 
+        sweep = ttk.LabelFrame(root, text="REW Sweep / Frequenzbereich")
+        sweep.grid(row=3, column=0, sticky="ew", pady=(0, 10))
+        for i in range(8):
+            sweep.columnconfigure(i, weight=1 if i in (1, 3, 5) else 0)
+        ttk.Label(sweep, text="Startfrequenz Hz").grid(row=0, column=0, padx=6, pady=6, sticky="w")
+        ttk.Entry(sweep, textvariable=self.start_frequency, width=10).grid(row=0, column=1, padx=6, pady=6, sticky="ew")
+        ttk.Label(sweep, text="Endfrequenz Hz").grid(row=0, column=2, padx=6, pady=6, sticky="w")
+        ttk.Entry(sweep, textvariable=self.end_frequency, width=10).grid(row=0, column=3, padx=6, pady=6, sticky="ew")
+        ttk.Label(sweep, text="Sweep-Länge").grid(row=0, column=4, padx=6, pady=6, sticky="w")
+        ttk.Combobox(sweep, textvariable=self.sweep_length, values=("128k", "256k", "512k", "1M", "2M"), width=10).grid(row=0, column=5, padx=6, pady=6, sticky="ew")
+        ttk.Label(sweep, text="Beispiel Hochtöner: 2000 bis 20000 Hz").grid(row=0, column=6, columnspan=2, padx=6, pady=6, sticky="w")
+
         log_frame = ttk.LabelFrame(root, text="Protokoll / Bedienhinweise")
-        log_frame.grid(row=3, column=0, sticky="nsew")
+        log_frame.grid(row=4, column=0, sticky="nsew")
         log_frame.columnconfigure(0, weight=1)
         log_frame.rowconfigure(0, weight=1)
 
@@ -127,7 +142,8 @@ class RewTurntableGui(tk.Tk):
 
         self.log(
             "Bereit. Beispiel: Start 0°, Ende 135°, Schritt 10° eingeben und 'Messreihe starten'.\n"
-            "Im manuellen Modus fährt das Programm den Winkel an und wartet, bis in REW eine neue Messung entstanden ist."
+            "Frequenzbereich kann z. B. für Hochtöner auf 2000 bis 20000 Hz gesetzt werden.\n"
+            "Im Auto-Modus: Teller drehen -> REW Sweep starten -> warten bis Messung fertig ist -> weiterdrehen."
         )
 
     def log(self, text: str) -> None:
@@ -222,6 +238,9 @@ class RewTurntableGui(tk.Tk):
         settle_s = float(self.settle_s.get())
         measure_timeout = float(self.measure_timeout.get())
         name_template = self.name_template.get()
+        start_frequency = int(self.start_frequency.get())
+        end_frequency = int(self.end_frequency.get())
+        sweep_length = self.sweep_length.get().strip()
 
         self.log("Starte Messreihe: " + ", ".join(f"{a:g}°" for a in angles))
         if mode in {"manual", "auto"}:
@@ -230,6 +249,11 @@ class RewTurntableGui(tk.Tk):
                 self.log(f"ABBRUCH: REW API nicht erreichbar: {health.error}")
                 return
             self.log("REW API OK.")
+            sweep_result = rew.configure_sweep(start_frequency, end_frequency, sweep_length)
+            if not sweep_result.ok:
+                self.log(f"ABBRUCH: REW Sweep-Konfiguration fehlgeschlagen: HTTP {sweep_result.status} {sweep_result.error}")
+                return
+            self.log(f"REW Sweep: {start_frequency} Hz bis {end_frequency} Hz, Länge {sweep_length}")
 
         for angle in angles:
             if self.stop_event.is_set():
@@ -265,7 +289,7 @@ class RewTurntableGui(tk.Tk):
                 return
 
             if mode == "manual":
-                self.log(f"Jetzt in REW die Messung für {angle:g}° starten. Ich warte auf eine neue Messung ...")
+                self.log(f"Jetzt in REW die Messung für {angle:g}° starten. Ich warte, bis die Messung gespeichert/angelegt ist ...")
             else:
                 result = rew.start_spl_measurement()
                 if not result.ok:

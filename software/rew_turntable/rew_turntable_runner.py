@@ -134,6 +134,28 @@ class RewClient:
     def set_notes(self, notes: str) -> None:
         self.post("/measure/notes", notes)
 
+    def configure_sweep(self, start_frequency: int | None = None, end_frequency: int | None = None, length: str | None = None) -> RewResult:
+        requested: dict[str, Any] = {}
+        if start_frequency is not None:
+            requested["startFrequency"] = int(start_frequency)
+        if end_frequency is not None:
+            requested["endFrequency"] = int(end_frequency)
+        if length:
+            requested["length"] = length
+        if not requested:
+            return RewResult(ok=True, status=200, data={"message": "no sweep changes"})
+
+        # REW protects sweep writes behind the Pro upgrade. Avoid a write when the
+        # requested values already match the current configuration, so the default
+        # full-range setup still runs on non-Pro installations.
+        current = self.get("/measure/sweep/configuration")
+        if current.ok and isinstance(current.data, dict):
+            changed = {k: v for k, v in requested.items() if current.data.get(k) != v}
+            if not changed:
+                return RewResult(ok=True, status=200, data={"message": "sweep already configured", "configuration": current.data})
+            requested = changed
+        return self.put("/measure/sweep/configuration", requested)
+
     def start_spl_measurement(self) -> RewResult:
         # Same command used by REW API example tools for a sweep/SPL measurement.
         return self.post("/measure/command", {"command": "SPL"})
@@ -193,6 +215,12 @@ def run_sequence(args: argparse.Namespace) -> int:
             print("Start REW 5.40+ with API enabled, e.g. roomeqwizard.exe -api", file=sys.stderr)
             return 2
         print("REW API reachable.")
+        sweep_result = rew.configure_sweep(args.start_frequency, args.end_frequency, args.sweep_length)
+        if not sweep_result.ok:
+            print(f"ERROR: could not configure REW sweep: HTTP {sweep_result.status} {sweep_result.error}", file=sys.stderr)
+            return 2
+        if args.start_frequency or args.end_frequency or args.sweep_length:
+            print(f"REW sweep configured: start={args.start_frequency or 'unchanged'} Hz end={args.end_frequency or 'unchanged'} Hz length={args.sweep_length or 'unchanged'}")
 
     for angle in angles:
         label = args.name_template.format(angle=("%g" % angle))
@@ -244,6 +272,9 @@ def main(argv: Iterable[str] | None = None) -> int:
     parser.add_argument("--angles", default="0:180:15", help="Comma list or range start:stop:step, e.g. 0,15,30 or 0:180:15")
     parser.add_argument("--settle-s", type=float, default=3.0, help="Wait time after moving before measurement")
     parser.add_argument("--measure-timeout", type=float, default=120.0)
+    parser.add_argument("--start-frequency", type=int, default=None, help="REW sweep start frequency in Hz, e.g. 2000 for tweeter measurements")
+    parser.add_argument("--end-frequency", type=int, default=None, help="REW sweep end frequency in Hz, e.g. 20000")
+    parser.add_argument("--sweep-length", default=None, help="REW sweep length, e.g. 256k, 512k, 1M")
     parser.add_argument("--name-template", default="Angle {angle} deg")
     parser.add_argument("--mode", choices=["turntable-only", "manual", "auto"], default="manual")
     parser.add_argument("--dry-run", action="store_true")

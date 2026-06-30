@@ -131,13 +131,24 @@ Für den normalen Werkstattbetrieb gibt es außerdem ein kleines Desktop-Fenster
 python software/rew_turntable/rew_turntable_gui.py
 ```
 
-Dort können Startwinkel, Endwinkel und Schrittweite frei eingegeben werden, z. B.:
+Dort können Startwinkel, Endwinkel, Schrittweite und der REW-Frequenzbereich frei eingegeben werden, z. B.:
 
 ```text
 Start: 0°
 Ende:  135°
 Schritt: 10°
+Startfrequenz: 2000 Hz
+Endfrequenz: 20000 Hz
 ```
+
+Der Frequenzbereich wird über die REW-API gesetzt:
+
+```http
+PUT /measure/sweep/configuration
+{"startFrequency": 2000, "endFrequency": 20000, "length": "512k"}
+```
+
+Das ist z. B. für Hochtöner sinnvoll, damit kein unnötiger Tieftonanteil im Sweep liegt.
 
 Das erzeugt die Reihe:
 
@@ -193,15 +204,26 @@ python software/rew_turntable/rew_turntable_runner.py \
   --turntable-ip 192.168.178.191 \
   --mode auto \
   --angles 0:180:15 \
-  --settle-s 3
+  --settle-s 3 \
+  --start-frequency 2000 \
+  --end-frequency 20000 \
+  --sweep-length 512k
 ```
 
-Dieser Modus ruft pro Winkel den REW-API-Befehl auf:
+Dieser Modus läuft so ab:
+
+1. REW-Sweepbereich konfigurieren, z. B. 2000–20000 Hz.
+2. Drehteller auf den Zielwinkel fahren.
+3. Einschwingzeit abwarten.
+4. REW-API-Befehl senden:
 
 ```http
 POST /measure/command
 {"command": "SPL"}
 ```
+
+5. Warten, bis in REW eine neue Messung unter `/measurements` erscheint.
+6. Erst dann zum nächsten Winkel fahren.
 
 Wenn REW meldet, dass die Lizenz nicht ausreicht, `--mode manual` verwenden oder REW Pro aktivieren.
 
