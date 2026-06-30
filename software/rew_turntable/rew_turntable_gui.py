@@ -9,6 +9,7 @@ coordinate one REW measurement per angle.
 from __future__ import annotations
 
 import queue
+import re
 import threading
 import time
 import tkinter as tk
@@ -61,12 +62,22 @@ class RewTurntableGui(tk.Tk):
         root.columnconfigure(0, weight=1)
         root.rowconfigure(4, weight=1)
 
+        header = ttk.Frame(root)
+        header.grid(row=0, column=0, sticky="ew", pady=(0, 10))
+        header.columnconfigure(0, weight=1)
         title = ttk.Label(
-            root,
+            header,
             text="REW-Drehteller Messreihe",
             font=("TkDefaultFont", 15, "bold"),
         )
-        title.grid(row=0, column=0, sticky="w", pady=(0, 10))
+        title.grid(row=0, column=0, sticky="w")
+        logo = tk.Canvas(header, width=170, height=46, highlightthickness=0, bg=self.cget("bg"))
+        logo.grid(row=0, column=1, sticky="e")
+        logo.create_oval(4, 4, 42, 42, fill="#101820", outline="#00A3E0", width=2)
+        logo.create_text(23, 18, text="FM", fill="white", font=("TkDefaultFont", 11, "bold"))
+        logo.create_text(23, 31, text="audio", fill="#00A3E0", font=("TkDefaultFont", 7, "bold"))
+        logo.create_text(54, 15, text="FM-Audio", anchor="w", fill="#101820", font=("TkDefaultFont", 13, "bold"))
+        logo.create_text(54, 31, text="Turntable + REW", anchor="w", fill="#555555", font=("TkDefaultFont", 8))
 
         conn = ttk.LabelFrame(root, text="Verbindung")
         conn.grid(row=1, column=0, sticky="ew", pady=(0, 10))
@@ -168,6 +179,15 @@ class RewTurntableGui(tk.Tk):
     def make_rew(self) -> RewClient:
         return RewClient(self.rew_url.get().strip(), timeout=20.0)
 
+    def log_turntable_reply(self, angle: float, reply: str) -> None:
+        elapsed_match = re.search(r"elapsed=([0-9.]+)s", reply)
+        source_match = re.search(r"reply_from=([^ ]+)", reply)
+        elapsed = f" in {elapsed_match.group(1)} s" if elapsed_match else ""
+        source = f" ({source_match.group(1)})" if source_match else ""
+        # The Arduino currently truncates its German UDP status text, so the GUI
+        # shows a clean application-level status instead of the raw shortened text.
+        self.log(f"Teller auf {angle:g}° gefahren{elapsed}{source}.")
+
     def check_rew(self) -> None:
         def work() -> None:
             rew = self.make_rew()
@@ -194,7 +214,7 @@ class RewTurntableGui(tk.Tk):
             self.log(f"Fahre Einzelwinkel {angle:g}° ...")
             try:
                 reply = self.make_turntable().move_to(float(angle))
-                self.log(reply)
+                self.log_turntable_reply(float(angle), reply)
             except Exception as exc:  # noqa: BLE001
                 self.log(f"FEHLER beim Fahren: {type(exc).__name__}: {exc}")
         self._start_worker(work)
@@ -262,7 +282,8 @@ class RewTurntableGui(tk.Tk):
 
             self.log(f"\n=== {angle:g}° ===")
             try:
-                self.log(turntable.move_to(angle))
+                reply = turntable.move_to(angle)
+                self.log_turntable_reply(angle, reply)
             except Exception as exc:  # noqa: BLE001
                 self.log(f"ABBRUCH: Turntable-Fehler: {type(exc).__name__}: {exc}")
                 return
