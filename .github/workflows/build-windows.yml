@@ -1,4 +1,4 @@
-name: Build Windows GUI
+name: Build GUI Downloads
 
 on:
   push:
@@ -50,4 +50,43 @@ jobs:
         with:
           name: FM-Audio-REW-Turntable-Windows
           path: FM-Audio-REW-Turntable-Windows.zip
+          if-no-files-found: error
+
+  linux-gui:
+    name: Linux Python GUI package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Package Linux download
+        run: |
+          set -euo pipefail
+          mkdir -p package
+          cp software/rew_turntable/rew_turntable_gui.py package/
+          cp software/rew_turntable/rew_turntable_runner.py package/
+          cp software/rew_turntable/run_gui_linux.sh package/
+          cp software/rew_turntable/install_desktop_launcher_linux.sh package/
+          cp software/rew_turntable/FM-Audio-REW-Turntable.desktop package/
+          mkdir -p package/assets
+          cp software/rew_turntable/assets/fm_audio_logo.png package/assets/
+          cp software/rew_turntable/LINUX.md package/README-LINUX.md
+          chmod +x package/run_gui_linux.sh package/install_desktop_launcher_linux.sh
+          python3 - <<'PY'
+          from pathlib import Path
+          from zipfile import ZIP_DEFLATED, ZipFile
+          zip_path = Path('FM-Audio-REW-Turntable-Linux.zip')
+          with ZipFile(zip_path, 'w', ZIP_DEFLATED) as zf:
+              for path in Path('package').rglob('*'):
+                  if path.is_file():
+                      zf.write(path, path.as_posix())
+          PY
+          sha256sum FM-Audio-REW-Turntable-Linux.zip
+
+      - name: Upload Linux artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: FM-Audio-REW-Turntable-Linux
+          path: FM-Audio-REW-Turntable-Linux.zip
           if-no-files-found: error

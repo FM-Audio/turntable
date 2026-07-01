@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=FM-Audio REW Turntable
+Comment=REW-Drehteller Messreihen steuern
+Exec=sh -c 'cd "$(dirname "$1")" && python3 rew_turntable_gui.py' dummy %k
+Icon=fm_audio_logo
+Terminal=false
+Categories=AudioVideo;Audio;Science;
+StartupNotify=true

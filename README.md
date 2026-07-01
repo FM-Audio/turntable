@@ -2,7 +2,7 @@
 
 Automatischer, netzwerkfähiger Drehteller für Lautsprecher-Directivity- und Polar-Messungen mit ARTA.
 
-![Aufgebauter ARTA-Drehteller](Bilder/1703231729781.jpg)
+![FM-Audio Drehteller Projektübersicht](Bilder/overview.jpg)
 
 ## Kurzbeschreibung
 
@@ -46,6 +46,21 @@ ARTA -> turntable.exe -> Netzwerk/UDP -> Arduino -> TB6600 -> NEMA23 -> Drehtell
 | [`Drehteller Dokument.docx`](Drehteller%20Dokument.docx) | ursprüngliche Projektdokumentation |
 | [`ARTA Manual/`](ARTA%20Manual/) | ARTA-Dokumentation zur Turntable-/Polar-Messung |
 | [`Drehteller.zip`](Drehteller.zip) | STEP/CAD-Datei |
+| [`docs/downloads.md`](docs/downloads.md) | Download-Hinweise für Windows, Linux, ARTA, CAD/DXF/STL |
+
+## Downloads
+
+| Ziel | Download / Datei |
+|---|---|
+| Komplettes Projekt | GitHub `Code` → `Download ZIP` |
+| REW-GUI für Windows | GitHub `Actions` → `Build GUI Downloads` → neuester erfolgreicher Lauf → Artifact `FM-Audio-REW-Turntable-Windows` |
+| REW-GUI für Linux/CachyOS inkl. Desktop-Icon | GitHub `Actions` → `Build GUI Downloads` → neuester erfolgreicher Lauf → Artifact `FM-Audio-REW-Turntable-Linux` |
+| ARTA-Treiber | [`ARTA Turntable File/turntable.exe`](ARTA%20Turntable%20File/turntable.exe) |
+| STEP/CAD | [`Drehteller.zip`](Drehteller.zip) |
+| DXF | [`DXF/`](DXF/) |
+| STL | [`STL/`](STL/) |
+
+Linux-Desktop-Starter: Im Linux-ZIP liegt `install_desktop_launcher_linux.sh`. Nach dem Ausführen erscheint der Starter als **FM-Audio REW Turntable** im Anwendungsmenü. Details: [`docs/downloads.md`](docs/downloads.md).
 
 ## Hardwareüberblick
 
@@ -166,19 +181,21 @@ Für die Werkstattbedienung mit frei einstellbarem Start-/Endwinkel, Schrittweit
 python software/rew_turntable/rew_turntable_gui.py
 ```
 
-Unter Windows gibt es zwei Varianten:
+Unter Windows und Linux gibt es vorbereitete Download-Pakete:
 
 | Variante | Download/Start |
 |---|---|
-| Fertige Windows-EXE | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Windows.zip` herunterladen und `FM-Audio-REW-Turntable.exe` starten |
-| Python-Version | `software\rew_turntable\run_gui_windows.bat` doppelklicken |
+| Fertige Windows-EXE | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Windows` aus Workflow `Build GUI Downloads` herunterladen und `FM-Audio-REW-Turntable.exe` starten |
+| Linux/CachyOS-Paket | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Linux` aus Workflow `Build GUI Downloads` herunterladen, `run_gui_linux.sh` starten oder `install_desktop_launcher_linux.sh` für den Desktop-Starter ausführen |
+| Python-Version | `software\rew_turntable\run_gui_windows.bat` doppelklicken oder unter Linux `software/rew_turntable/run_gui_linux.sh` starten |
 
-Die Windows-EXE wird automatisch über `.github/workflows/build-windows.yml` gebaut.
+Die Windows-EXE und das Linux-Paket werden automatisch über `.github/workflows/build-windows.yml` gebaut.
 
 ## Dokumentation
 
 | Dokument | Zweck |
 |---|---|
+| [`docs/downloads.md`](docs/downloads.md) | Download-Pakete und Startdateien für Windows/Linux |
 | [`docs/build-guide.md`](docs/build-guide.md) | Aufbau und Projektüberblick |
 | [`docs/wiring.md`](docs/wiring.md) | Anschluss, Pins und Verdrahtung |
 | [`docs/arta-setup.md`](docs/arta-setup.md) | Einrichtung in ARTA |
@@ -204,7 +221,7 @@ Vor dem Einschalten prüfen:
 
 - Python-Quellcode zu `turntable.exe` ergänzen.
 - README-Bilder weiter optimieren und verkleinern.
-- Release-ZIP erstellen, damit Nutzer nicht das ganze Repository laden müssen.
+- GitHub Release mit versionierten ZIP-Dateien ergänzen, damit Nutzer nicht auf zeitlich begrenzte Actions-Artefakte angewiesen sind.
 - Arduino-Code stärker kommentieren und Konstanten in einen Konfigurationsblock verschieben.
 - Mechanik-Maße und Montage-Reihenfolge noch ausführlicher dokumentieren.
 
