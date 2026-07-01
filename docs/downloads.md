@@ -7,8 +7,8 @@ Dieses Repository enthält Hardware-Dateien, Firmware und Software-Starter für 
 | Paket / Datei | Zweck | Wo herunterladen? |
 |---|---|---|
 | Komplettes Projekt | Firmware, CAD, Bilder, Doku, Software | GitHub: `Code -> Download ZIP` |
-| Windows GUI | Fertige `FM-Audio-REW-Turntable.exe` für REW | GitHub `Actions -> Build GUI Downloads -> neuester erfolgreicher Lauf -> Artifacts -> FM-Audio-REW-Turntable-Windows` |
-| Linux GUI + Desktop-Icon | Python/Tkinter-GUI, Shell-Starter, `.desktop`-Launcher | GitHub `Actions -> Build GUI Downloads -> neuester erfolgreicher Lauf -> Artifacts -> FM-Audio-REW-Turntable-Linux` |
+| Windows GUI | Fertige `FM-Audio-REW-Turntable.exe` für REW | GitHub `Releases` -> `FM-Audio-REW-Turntable-Windows.zip` |
+| Linux GUI + Desktop-Icon | Python/Tkinter-GUI, Shell-Starter, `.desktop`-Launcher | GitHub `Releases` -> `FM-Audio-REW-Turntable-Linux.zip` |
 | ARTA-Treiber | Klassische ARTA-Datei `turntable.exe` | Im Repo: `ARTA Turntable File/turntable.exe` |
 | STEP/CAD | STEP-Datei für den Drehteller | Im Repo: `Drehteller.zip` |
 | DXF-Dateien | Fräs-/Laser-Dateien | Im Repo: `DXF/` |
@@ -16,16 +16,19 @@ Dieses Repository enthält Hardware-Dateien, Firmware und Software-Starter für 
 
 ## Windows
 
-1. Auf GitHub den Reiter `Actions` öffnen.
-2. Workflow `Build GUI Downloads` auswählen.
-3. Den neuesten grünen Lauf öffnen.
-4. Unter `Artifacts` herunterladen:
+1. Auf GitHub den Bereich `Releases` öffnen:
 
 ```text
-FM-Audio-REW-Turntable-Windows
+https://github.com/FM-Audio/turntable/releases
 ```
 
-5. ZIP entpacken und starten:
+2. Das Windows-Paket herunterladen:
+
+```text
+FM-Audio-REW-Turntable-Windows.zip
+```
+
+3. ZIP entpacken und starten:
 
 ```text
 FM-Audio-REW-Turntable.exe
@@ -33,30 +36,33 @@ FM-Audio-REW-Turntable.exe
 
 ## Linux / CachyOS / Arch
 
-1. Auf GitHub den Reiter `Actions` öffnen.
-2. Workflow `Build GUI Downloads` auswählen.
-3. Den neuesten grünen Lauf öffnen.
-4. Unter `Artifacts` herunterladen:
+1. Auf GitHub den Bereich `Releases` öffnen:
 
 ```text
-FM-Audio-REW-Turntable-Linux
+https://github.com/FM-Audio/turntable/releases
 ```
 
-5. ZIP entpacken.
-6. Voraussetzungen installieren, z. B. auf CachyOS/Arch:
+2. Das Linux-Paket herunterladen:
+
+```text
+FM-Audio-REW-Turntable-Linux.zip
+```
+
+3. ZIP entpacken.
+4. Voraussetzungen installieren, z. B. auf CachyOS/Arch:
 
 ```bash
 sudo pacman -S python tk
 ```
 
-7. Direkt starten:
+5. Direkt starten:
 
 ```bash
 chmod +x run_gui_linux.sh
 ./run_gui_linux.sh
 ```
 
-8. Optional Desktop-Icon installieren:
+6. Optional Desktop-Icon installieren:
 
 ```bash
 chmod +x install_desktop_launcher_linux.sh
@@ -69,6 +75,6 @@ Danach gibt es einen Anwendungsstarter:
 FM-Audio REW Turntable
 ```
 
-## Hinweis zu GitHub Actions Artifacts
+## Actions-Artefakte
 
-GitHub-Actions-Artefakte sind für einfache Downloads praktisch, können aber nach einiger Zeit ablaufen. Für dauerhaft versionierte Downloads sollte zusätzlich eine GitHub Release mit den ZIP-Dateien erstellt werden.
+Zusätzlich erzeugt der Workflow `Build GUI Downloads` weiterhin GitHub-Actions-Artefakte. Für normale Nutzer sind aber die Dateien im Bereich `Releases` der empfohlene Download-Weg.

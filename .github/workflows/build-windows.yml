@@ -6,6 +6,9 @@ on:
     tags: ['v*']
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   windows-gui:
     name: Windows executable
@@ -52,6 +55,12 @@ jobs:
           path: FM-Audio-REW-Turntable-Windows.zip
           if-no-files-found: error
 
+      - name: Upload Windows ZIP to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: FM-Audio-REW-Turntable-Windows.zip
+
   linux-gui:
     name: Linux Python GUI package
     runs-on: ubuntu-latest
@@ -90,3 +99,9 @@ jobs:
           name: FM-Audio-REW-Turntable-Linux
           path: FM-Audio-REW-Turntable-Linux.zip
           if-no-files-found: error
+
+      - name: Upload Linux ZIP to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: FM-Audio-REW-Turntable-Linux.zip

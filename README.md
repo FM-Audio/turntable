@@ -53,8 +53,8 @@ ARTA -> turntable.exe -> Netzwerk/UDP -> Arduino -> TB6600 -> NEMA23 -> Drehtell
 | Ziel | Download / Datei |
 |---|---|
 | Komplettes Projekt | GitHub `Code` → `Download ZIP` |
-| REW-GUI für Windows | GitHub `Actions` → `Build GUI Downloads` → neuester erfolgreicher Lauf → Artifact `FM-Audio-REW-Turntable-Windows` |
-| REW-GUI für Linux/CachyOS inkl. Desktop-Icon | GitHub `Actions` → `Build GUI Downloads` → neuester erfolgreicher Lauf → Artifact `FM-Audio-REW-Turntable-Linux` |
+| REW-GUI für Windows | GitHub `Releases` → `FM-Audio-REW-Turntable-Windows.zip` |
+| REW-GUI für Linux/CachyOS inkl. Desktop-Icon | GitHub `Releases` → `FM-Audio-REW-Turntable-Linux.zip` |
 | ARTA-Treiber | [`ARTA Turntable File/turntable.exe`](ARTA%20Turntable%20File/turntable.exe) |
 | STEP/CAD | [`Drehteller.zip`](Drehteller.zip) |
 | DXF | [`DXF/`](DXF/) |
@@ -185,8 +185,8 @@ Unter Windows und Linux gibt es vorbereitete Download-Pakete:
 
 | Variante | Download/Start |
 |---|---|
-| Fertige Windows-EXE | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Windows` aus Workflow `Build GUI Downloads` herunterladen und `FM-Audio-REW-Turntable.exe` starten |
-| Linux/CachyOS-Paket | GitHub Actions-Artefakt `FM-Audio-REW-Turntable-Linux` aus Workflow `Build GUI Downloads` herunterladen, `run_gui_linux.sh` starten oder `install_desktop_launcher_linux.sh` für den Desktop-Starter ausführen |
+| Fertige Windows-EXE | GitHub Release `FM-Audio-REW-Turntable-Windows.zip` herunterladen und `FM-Audio-REW-Turntable.exe` starten |
+| Linux/CachyOS-Paket | GitHub Release `FM-Audio-REW-Turntable-Linux.zip` herunterladen, `run_gui_linux.sh` starten oder `install_desktop_launcher_linux.sh` für den Desktop-Starter ausführen |
 | Python-Version | `software\rew_turntable\run_gui_windows.bat` doppelklicken oder unter Linux `software/rew_turntable/run_gui_linux.sh` starten |
 
 Die Windows-EXE und das Linux-Paket werden automatisch über `.github/workflows/build-windows.yml` gebaut.
