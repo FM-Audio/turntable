@@ -2,7 +2,7 @@
 
 Automatischer, netzwerkfähiger Drehteller für Lautsprecher-Directivity- und Polar-Messungen mit ARTA.
 
-![FM-Audio Drehteller Projektübersicht](Bilder/overview.jpg)
+![FM-Audio Drehteller Projektübersicht](Bilder/overview.png)
 
 ## Kurzbeschreibung
 
